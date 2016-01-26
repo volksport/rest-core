@@ -103,7 +103,10 @@ class RestCore::EventSource < Struct.new(:client, :path, :query, :opts,
   # called in requesting thread after the request is done
   def onmessage_for sock
     until IO.select([sock], [], [], READ_WAIT).nil?
+      puts "Inside onmessage_for loop #{DateTime.now}"
+      $stdout.flush
       event = sock.readline("\n\n").split("\n").inject({}) do |r, i|
+        puts "Inside readline #{DateTime.now}"
         k, v = i.split(': ', 2)
         r[k] = v
         r
